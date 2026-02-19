@@ -13,6 +13,10 @@ export const lightColors = {
   rage: "#f97316",
   streak: "#8b5cf6",
   barBackground: "#e4e7eb",
+  drawerWoodBase: "#8b5a2b",
+  drawerWoodDark: "#6e431f",
+  drawerWoodLight: "#a9743a",
+  drawerWoodHandle: "#c9985a",
 };
 
 export const darkColors = {
@@ -30,6 +34,10 @@ export const darkColors = {
   rage: "#fb923c",
   streak: "#c084fc",
   barBackground: "#2a3238",
+  drawerWoodBase: "#70411f",
+  drawerWoodDark: "#4f2d14",
+  drawerWoodLight: "#956234",
+  drawerWoodHandle: "#b8844a",
 };
 
 export type ThemeColors = typeof lightColors;

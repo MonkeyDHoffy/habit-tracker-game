@@ -1,13 +1,15 @@
 import { useMemo, useState } from "react";
+import { View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createInitialBattleState } from "@schweinehund/game-core";
 import ScreenContainer from "../../components/shared/containers/ScreenContainer";
+import { useTheme } from "../../theme/ThemeProvider";
 import HomeHeader from "./components/HomeHeader";
 import BattleOverviewCard from "./components/BattleOverviewCard";
 import MainMenu from "./components/MainMenu";
 import RunCard from "./components/RunCard";
-import { homeScreenStyles } from "./HomeScreen.styles";
+import { createHomeScreenStyles } from "./HomeScreen.styles";
 import { RootStackParamList, routes } from "../../navigation/routes";
 import { formatActiveRunText, homeMenuItems, homeScreenConfig, HomeMenuItemId } from "./homeScreen.config";
 
@@ -20,6 +22,8 @@ type HomeNavigation = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigation>();
+  const { colors } = useTheme();
+  const homeScreenStyles = createHomeScreenStyles(colors);
   const [activeRun, setActiveRun] = useState<Run | null>(null);
 
   const runStatusLabel = useMemo(() => {
@@ -64,29 +68,35 @@ export default function HomeScreen() {
   return (
     <ScreenContainer contentStyle={homeScreenStyles.content}>
       <HomeHeader appTitle={homeScreenConfig.header.appTitle} screenTitle={homeScreenConfig.header.screenTitle} />
-      <BattleOverviewCard
-        pigHp={740}
-        pigMaxHp={1000}
-        pigRage={3}
-        playerHp={620}
-        playerMaxHp={1000}
-        playerShield={4}
-        runDay={7}
-        dailyStreak={6}
-        routinesDone={5}
-        routinesTotal={6}
-      />
-      <MainMenu
-        sectionTitle={homeScreenConfig.menuSectionTitle}
-        menuItems={homeMenuItems}
-        onSelectMenuItem={handleMenuSelect}
-      />
-      <RunCard
-        sectionTitle={homeScreenConfig.runSectionTitle}
-        runStatusLabel={runStatusLabel}
-        startRunButtonLabel={homeScreenConfig.newRunButtonLabel}
-        onStartNewRun={handleStartNewRun}
-      />
+      <View style={homeScreenStyles.sectionFrame}>
+        <BattleOverviewCard
+          pigHp={740}
+          pigMaxHp={1000}
+          pigRage={3}
+          playerHp={620}
+          playerMaxHp={1000}
+          playerShield={4}
+          runDay={7}
+          dailyStreak={6}
+          routinesDone={5}
+          routinesTotal={6}
+        />
+      </View>
+      <View style={homeScreenStyles.sectionFrame}>
+        <MainMenu
+          sectionTitle={homeScreenConfig.menuSectionTitle}
+          menuItems={homeMenuItems}
+          onSelectMenuItem={handleMenuSelect}
+        />
+      </View>
+      <View style={homeScreenStyles.sectionFrame}>
+        <RunCard
+          sectionTitle={homeScreenConfig.runSectionTitle}
+          runStatusLabel={runStatusLabel}
+          startRunButtonLabel={homeScreenConfig.newRunButtonLabel}
+          onStartNewRun={handleStartNewRun}
+        />
+      </View>
       
      
     </ScreenContainer>

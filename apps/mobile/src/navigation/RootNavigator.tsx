@@ -13,9 +13,9 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 export default function RootNavigator() {
   return (
     <NavigationContainer>
-      <RootStack.Navigator>
+      <RootStack.Navigator initialRouteName={routes.run}>
         <RootStack.Screen name={routes.home} component={HomeScreen} options={{ headerShown: false }} />
-        <RootStack.Screen name={routes.run} component={RunScreen} options={{ title: "Run" }} />
+        <RootStack.Screen name={routes.run} component={RunScreen} options={{ headerShown: false }} />
         <RootStack.Screen name={routes.settings} component={SettingsScreen} options={{ title: "Einstellungen" }} />
         <RootStack.Screen name={routes.profile} component={ProfileScreen} options={{ title: "Profil" }} />
         <RootStack.Screen name={routes.stats} component={StatsScreen} options={{ title: "Statistiken" }} />
