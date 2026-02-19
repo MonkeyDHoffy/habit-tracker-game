@@ -36,8 +36,10 @@ export default function BattleOverviewCard({
   const playerPercent = Math.round((playerHp / playerMaxHp) * 100);
 
   return (
-    <AppCard>
-      <AppText variant="sectionTitle">Kampfübersicht</AppText>
+    <AppCard style={styles.card}>
+      <AppText variant="sectionTitle" style={styles.title}>
+        Kampfübersicht
+      </AppText>
 
       {/* Pig health row */}
       <View style={styles.rowHeader}>
@@ -63,19 +65,19 @@ export default function BattleOverviewCard({
 
       {/* Meta stats */}
       <View style={styles.metaRow}>
-        <View>
+        <View style={styles.metaBlock}>
           <AppText variant="bodySmall" style={styles.metaLabel}>
             Run-Tag
           </AppText>
           <AppText variant="body">Tag {runDay}</AppText>
         </View>
-        <View>
+        <View style={styles.metaBlock}>
           <AppText variant="bodySmall" style={styles.metaLabel}>
             Daily Streak
           </AppText>
           <AppText variant="body">{dailyStreak} Tage</AppText>
         </View>
-        <View>
+        <View style={styles.metaBlock}>
           <AppText variant="bodySmall" style={styles.metaLabel}>
             Routinen
           </AppText>

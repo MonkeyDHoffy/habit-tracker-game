@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Image, PanResponder, Pressable, useWindowDimensions, View } from "react-native";
+import { Animated, Image, Pressable, useWindowDimensions, View } from "react-native";
+import AppIconButton from "../../components/shared/buttons/AppIconButton";
+import BottomDrawer from "../../components/shared/containers/BottomDrawer";
 import AppText from "../../components/shared/typography/AppText";
 import { useTheme } from "../../theme/ThemeProvider";
 import HomeScreen from "../home/HomeScreen";
+import RunDrawerContent from "./components/RunDrawerContent";
 import { createRunScreenStyles } from "./RunScreen.styles";
 
 const battleBackground = require("../../../assets/background/four.png");
 const pigEnemyImage = require("../../../assets/pigpics/pigone.png");
 const DEBUG_LAYOUT = false;
+const DRAWER_HEIGHT_RATIO = 0.58;
+const DRAWER_MAX_HEIGHT = 460;
+const DRAWER_PEEK_HEIGHT = 92;
 
 // Presets for pig size/position above the drawer.
 // Change only this one value to test a different look: "small" | "medium" | "large" | "cinematic"
@@ -46,9 +52,7 @@ export default function RunScreen() {
   const runScreenStyles = createRunScreenStyles(colors);
   const debugStyle = DEBUG_LAYOUT ? runScreenStyles.debugOutline : undefined;
 
-  // Drawer sizing: small visible handle when closed, larger menu when opened.
-  const drawerHeight = Math.min(460, Math.round(screenHeight * 0.58));
-  const closedOffset = drawerHeight - 92;
+  const drawerHeight = Math.min(DRAWER_MAX_HEIGHT, Math.round(screenHeight * DRAWER_HEIGHT_RATIO));
   const selectedPigPreset = PIG_PRESET_CONFIG[PIG_PRESET];
 
   // Pig should sit centered above the drawer when the drawer is fully opened.
@@ -56,8 +60,7 @@ export default function RunScreen() {
   const enemyBottomOffset = drawerHeight + selectedPigPreset.bottomGap;
   const enemyLeft = (screenWidth - enemySize) / 2 + selectedPigPreset.horizontalOffset;
 
-  const drawerTranslateY = useRef(new Animated.Value(closedOffset)).current;
-  const dragStartY = useRef(closedOffset);
+  const [isBattleDrawerOpen, setIsBattleDrawerOpen] = useState(false);
   const [isHomeOverlayVisible, setIsHomeOverlayVisible] = useState(false);
   const homeTranslateX = useRef(new Animated.Value(screenWidth)).current;
 
@@ -66,15 +69,6 @@ export default function RunScreen() {
       homeTranslateX.setValue(screenWidth);
     }
   }, [homeTranslateX, isHomeOverlayVisible, screenWidth]);
-
-  function animateDrawer(toValue: number) {
-    Animated.spring(drawerTranslateY, {
-      toValue,
-      useNativeDriver: true,
-      bounciness: 0,
-      speed: 16,
-    }).start();
-  }
 
   function openHomeOverlay() {
     setIsHomeOverlayVisible(true);
@@ -96,32 +90,6 @@ export default function RunScreen() {
       }
     });
   }
-
-  const drawerPanResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, gestureState) => Math.abs(gestureState.dy) > 6,
-      onPanResponderGrant: () => {
-        drawerTranslateY.stopAnimation((value) => {
-          dragStartY.current = value;
-        });
-      },
-      onPanResponderMove: (_, gestureState) => {
-        const nextValue = Math.max(0, Math.min(closedOffset, dragStartY.current + gestureState.dy));
-        drawerTranslateY.setValue(nextValue);
-      },
-      onPanResponderRelease: (_, gestureState) => {
-        const currentValue = Math.max(0, Math.min(closedOffset, dragStartY.current + gestureState.dy));
-
-        // If user drags enough upward, open drawer, else snap back closed.
-        if (currentValue < closedOffset * 0.55 || gestureState.vy < -0.45) {
-          animateDrawer(0);
-          return;
-        }
-
-        animateDrawer(closedOffset);
-      },
-    })
-  ).current;
 
   return (
     <View style={[runScreenStyles.root, debugStyle]}>
@@ -148,30 +116,16 @@ export default function RunScreen() {
         <Image source={pigEnemyImage} style={runScreenStyles.enemyImage} resizeMode="contain" />
       </View>
 
-      <Animated.View
-        style={[
-          runScreenStyles.bottomDrawer,
-          debugStyle,
-          { height: drawerHeight, transform: [{ translateY: drawerTranslateY }] },
-        ]}
-        {...drawerPanResponder.panHandlers}
+      <BottomDrawer
+        mode="persistent-peek"
+        isOpen={isBattleDrawerOpen}
+        onOpenChange={setIsBattleDrawerOpen}
+        drawerHeightRatio={DRAWER_HEIGHT_RATIO}
+        drawerMaxHeight={DRAWER_MAX_HEIGHT}
+        peekHeight={DRAWER_PEEK_HEIGHT}
       >
-        <View style={runScreenStyles.handle} />
-        <View style={runScreenStyles.grainLineStrong} />
-        <View style={runScreenStyles.grainLineSoft} />
-        <View style={runScreenStyles.textBlock}>
-          <AppText variant="sectionTitle">Kampfmenü</AppText>
-          <AppText variant="bodySmall">Zieh nach oben, um Routinen für den Tageskampf anzuzeigen.</AppText>
-
-          {/* Placeholder content: this will later become the routine check menu */}
-          <View style={runScreenStyles.menuList}>
-            <AppText variant="body">• Gute Routinen (abhaken)</AppText>
-            <AppText variant="body">• Schlechte Routinen (abhaken)</AppText>
-            <AppText variant="body">• Tagesfortschritt</AppText>
-            <AppText variant="body">• Kampf abschließen</AppText>
-          </View>
-        </View>
-      </Animated.View>
+        <RunDrawerContent />
+      </BottomDrawer>
 
       {/* Home screen slides in from right and sits above Run screen */}
       {isHomeOverlayVisible && (
@@ -179,11 +133,12 @@ export default function RunScreen() {
           style={[runScreenStyles.homeOverlay, debugStyle, { transform: [{ translateX: homeTranslateX }] }]}
         >
           <HomeScreen />
-          <Pressable style={runScreenStyles.closeOverlayButton} onPress={closeHomeOverlay}>
-            <AppText variant="body" style={runScreenStyles.closeOverlayIcon}>
-              ✕
-            </AppText>
-          </Pressable>
+          <AppIconButton
+            icon="✕"
+            onPress={closeHomeOverlay}
+            style={runScreenStyles.closeOverlayButton}
+            accessibilityLabel="Overlay schließen"
+          />
         </Animated.View>
       )}
     </View>

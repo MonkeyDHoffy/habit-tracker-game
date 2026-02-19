@@ -1,22 +1,12 @@
-import { useMemo, useState } from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { createInitialBattleState } from "@schweinehund/game-core";
 import ScreenContainer from "../../components/shared/containers/ScreenContainer";
 import { useTheme } from "../../theme/ThemeProvider";
-import HomeHeader from "./components/HomeHeader";
-import BattleOverviewCard from "./components/BattleOverviewCard";
-import MainMenu from "./components/MainMenu";
-import RunCard from "./components/RunCard";
+import AppButton from "../../components/shared/buttons/AppButton";
 import { createHomeScreenStyles } from "./HomeScreen.styles";
 import { RootStackParamList, routes } from "../../navigation/routes";
-import { formatActiveRunText, homeMenuItems, homeScreenConfig, HomeMenuItemId } from "./homeScreen.config";
-
-type Run = {
-  id: string;
-  startedAt: string;
-};
+import { homeMenuItems, homeScreenConfig, HomeMenuItemId } from "./homeScreen.config";
 
 type HomeNavigation = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -24,29 +14,21 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigation>();
   const { colors } = useTheme();
   const homeScreenStyles = createHomeScreenStyles(colors);
-  const [activeRun, setActiveRun] = useState<Run | null>(null);
-
-  const runStatusLabel = useMemo(() => {
-    if (!activeRun) {
-      return homeScreenConfig.noActiveRunText;
-    }
-
-    return formatActiveRunText(activeRun.id, activeRun.startedAt);
-  }, [activeRun]);
 
   function handleStartNewRun() {
-    const initialState = createInitialBattleState();
-    const newRunId = `RUN-${initialState.day}-${Date.now().toString().slice(-5)}`;
-    const startedAt = new Date().toLocaleTimeString("de-DE", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    setActiveRun({ id: newRunId, startedAt });
     navigation.navigate(routes.run);
   }
 
+  function handleOpenHabits() {
+    navigation.navigate(routes.routines);
+  }
+
   function handleMenuSelect(menuItemId: HomeMenuItemId) {
+    if (menuItemId === "run") {
+      handleStartNewRun();
+      return;
+    }
+
     if (menuItemId === "profile") {
       navigation.navigate(routes.profile);
       return;
@@ -67,38 +49,19 @@ export default function HomeScreen() {
 
   return (
     <ScreenContainer contentStyle={homeScreenStyles.content}>
-      <HomeHeader appTitle={homeScreenConfig.header.appTitle} screenTitle={homeScreenConfig.header.screenTitle} />
-      <View style={homeScreenStyles.sectionFrame}>
-        <BattleOverviewCard
-          pigHp={740}
-          pigMaxHp={1000}
-          pigRage={3}
-          playerHp={620}
-          playerMaxHp={1000}
-          playerShield={4}
-          runDay={7}
-          dailyStreak={6}
-          routinesDone={5}
-          routinesTotal={6}
-        />
+      <Image source={require("../../../assets/background/wood.png")} style={homeScreenStyles.backgroundImage} resizeMode="cover" />
+      <View pointerEvents="none" style={homeScreenStyles.backgroundOverlay} />
+
+      <View style={homeScreenStyles.actionsList}>
+        <View style={[homeScreenStyles.actionSlot, homeScreenStyles.firstActionSlot]}>
+          <AppButton label={homeScreenConfig.habitsButtonLabel} variant="menu" onPress={handleOpenHabits} />
+        </View>
+        {homeMenuItems.map((menuItem) => (
+          <View key={menuItem.id} style={homeScreenStyles.actionSlot}>
+            <AppButton label={menuItem.label} variant="menu" onPress={() => handleMenuSelect(menuItem.id)} />
+          </View>
+        ))}
       </View>
-      <View style={homeScreenStyles.sectionFrame}>
-        <MainMenu
-          sectionTitle={homeScreenConfig.menuSectionTitle}
-          menuItems={homeMenuItems}
-          onSelectMenuItem={handleMenuSelect}
-        />
-      </View>
-      <View style={homeScreenStyles.sectionFrame}>
-        <RunCard
-          sectionTitle={homeScreenConfig.runSectionTitle}
-          runStatusLabel={runStatusLabel}
-          startRunButtonLabel={homeScreenConfig.newRunButtonLabel}
-          onStartNewRun={handleStartNewRun}
-        />
-      </View>
-      
-     
     </ScreenContainer>
   );
 }

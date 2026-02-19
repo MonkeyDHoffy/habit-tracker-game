@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/home/HomeScreen";
 import RunScreen from "../screens/run/RunScreen";
+import RoutinesScreen from "../screens/routines";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import StatsScreen from "../screens/stats/StatsScreen";
@@ -16,6 +17,7 @@ export default function RootNavigator() {
       <RootStack.Navigator initialRouteName={routes.run}>
         <RootStack.Screen name={routes.home} component={HomeScreen} options={{ headerShown: false }} />
         <RootStack.Screen name={routes.run} component={RunScreen} options={{ headerShown: false }} />
+        <RootStack.Screen name={routes.routines} component={RoutinesScreen} options={{ title: "Habits" }} />
         <RootStack.Screen name={routes.settings} component={SettingsScreen} options={{ title: "Einstellungen" }} />
         <RootStack.Screen name={routes.profile} component={ProfileScreen} options={{ title: "Profil" }} />
         <RootStack.Screen name={routes.stats} component={StatsScreen} options={{ title: "Statistiken" }} />

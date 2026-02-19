@@ -5,6 +5,14 @@ import { radius } from "../../../theme/radius";
 
 export const createBattleOverviewStyles = (colors: ThemeColors) =>
   StyleSheet.create({
+    card: {
+      backgroundColor: colors.drawerWoodHandle,
+      borderWidth: 1,
+      borderColor: colors.drawerWoodLight,
+    },
+    title: {
+      color: colors.drawerWoodDark,
+    },
     rowHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
@@ -34,8 +42,16 @@ export const createBattleOverviewStyles = (colors: ThemeColors) =>
       flexDirection: "row",
       justifyContent: "space-between",
       marginTop: spacing.md,
+      gap: spacing.sm,
     },
     metaLabel: {
-      color: colors.subtitle,
+      color: colors.drawerWoodDark,
+    },
+    metaBlock: {
+      flex: 1,
+      backgroundColor: colors.cardBackground,
+      borderRadius: radius.sm,
+      paddingVertical: spacing.xs,
+      paddingHorizontal: spacing.sm,
     },
   });

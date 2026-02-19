@@ -1,6 +1,6 @@
 import { spacing } from "../../theme/spacing";
 
-export type HomeMenuItemId = "profile" | "stats" | "settings" | "help";
+export type HomeMenuItemId = "run" | "profile" | "stats" | "settings" | "help";
 
 export type HomeMenuItem = {
   id: HomeMenuItemId;
@@ -10,23 +10,18 @@ export type HomeMenuItem = {
 // Central place to tweak home screen copy and lightweight layout values.
 export const homeScreenConfig = {
   header: {
-    appTitle: "Schweinehund",
-    screenTitle: "Startseite",
+    appTitle: "Menü",
+    screenTitle: "",
   },
-  menuSectionTitle: "Mehr",
-  runSectionTitle: "Run",
-  newRunButtonLabel: "Neuen Run starten",
-  noActiveRunText: "Kein aktiver Run",
+  habitsButtonLabel: "Habits",
+  runMenuItemLabel: "Neuen Run starten",
   contentGap: spacing.lg,
 } as const;
 
 export const homeMenuItems: HomeMenuItem[] = [
+  { id: "run", label: homeScreenConfig.runMenuItemLabel },
   { id: "profile", label: "Profil" },
   { id: "stats", label: "Statistiken" },
   { id: "settings", label: "Einstellungen" },
   { id: "help", label: "Hilfe" },
 ];
-
-export function formatActiveRunText(runId: string, startedAt: string): string {
-  return `Aktiver Run: ${runId} (${startedAt})`;
-}

@@ -5,7 +5,7 @@ export default function HelpScreen() {
   return (
     <ScreenContainer>
       <AppText variant="appTitle">Hilfe</AppText>
-      <AppText variant="body">Hier kommen sp‰ter FAQs und Erkl‰rungen hin.</AppText>
+      <AppText variant="body">Hier findest du bald FAQ, Spielregeln und klare Erkl√§rungen zu Routinen und Runs.</AppText>
     </ScreenContainer>
   );
 }
