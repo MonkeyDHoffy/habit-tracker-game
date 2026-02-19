@@ -22,16 +22,15 @@ export const createRunScreenStyles = (colors: ThemeColors) =>
       position: "absolute",
       top: spacing.xl,
       right: spacing.lg,
-      width: 36,
-      height: 36,
-      borderRadius: 18,
+      width: 46,
+      height: 46,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.35)",
       zIndex: 20,
     },
-    gearIcon: {
-      color: "#ffffff",
+    gearIconImage: {
+      width: "100%",
+      height: "100%",
     },
     enemyContainer: {
       position: "absolute",

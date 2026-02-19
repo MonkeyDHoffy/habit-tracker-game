@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, Pressable, useWindowDimensions, View } from "react-native";
 import AppIconButton from "../../components/shared/buttons/AppIconButton";
 import BottomDrawer from "../../components/shared/containers/BottomDrawer";
-import AppText from "../../components/shared/typography/AppText";
 import { useTheme } from "../../theme/ThemeProvider";
 import HomeScreen from "../home/HomeScreen";
 import RunDrawerContent from "./components/RunDrawerContent";
@@ -10,6 +9,8 @@ import { createRunScreenStyles } from "./RunScreen.styles";
 
 const battleBackground = require("../../../assets/background/four.png");
 const pigEnemyImage = require("../../../assets/pigpics/pigone.png");
+const gearIconImage = require("../../../assets/icons/gear.png");
+const closeIconImage = require("../../../assets/icons/close.png");
 const DEBUG_LAYOUT = false;
 const DRAWER_HEIGHT_RATIO = 0.58;
 const DRAWER_MAX_HEIGHT = 460;
@@ -99,9 +100,7 @@ export default function RunScreen() {
 
       {/* Small gear button in the top-right corner */}
       <Pressable style={[runScreenStyles.gearButton, debugStyle]} onPress={openHomeOverlay}>
-        <AppText variant="body" style={runScreenStyles.gearIcon}>
-          ⚙️
-        </AppText>
+        <Image source={gearIconImage} style={runScreenStyles.gearIconImage} resizeMode="contain" />
       </Pressable>
 
       {/* Pig enemy container: centered and placed just above max-open drawer */}
@@ -134,7 +133,7 @@ export default function RunScreen() {
         >
           <HomeScreen />
           <AppIconButton
-            icon="✕"
+            imageSource={closeIconImage}
             onPress={closeHomeOverlay}
             style={runScreenStyles.closeOverlayButton}
             accessibilityLabel="Overlay schließen"

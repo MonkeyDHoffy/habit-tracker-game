@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Image, ImageSourcePropType, Pressable, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "../../../theme/ThemeProvider";
 import { AppIconButtonStyle, createAppIconButtonStyles } from "./AppIconButton.styles";
 
 type AppIconButtonProps = {
-  icon: string;
+  icon?: string;
+  imageSource?: ImageSourcePropType;
   onPress: () => void;
   style?: AppIconButtonStyle;
   accessibilityLabel?: string;
 };
 
-export default function AppIconButton({ icon, onPress, style, accessibilityLabel }: AppIconButtonProps) {
+export default function AppIconButton({ icon, imageSource, onPress, style, accessibilityLabel }: AppIconButtonProps) {
   const { colors } = useTheme();
   const appIconButtonStyles = createAppIconButtonStyles(colors);
   const [isHovered, setIsHovered] = useState(false);
@@ -19,6 +20,23 @@ export default function AppIconButton({ icon, onPress, style, accessibilityLabel
   const gradientColors = isHovered
     ? ([colors.buttonGoldHoverStart, colors.buttonGoldHoverMid, colors.buttonGoldHoverEnd] as const)
     : ([colors.buttonGoldStart, colors.buttonGoldMid, colors.buttonGoldEnd] as const);
+
+  if (imageSource) {
+    return (
+      <Pressable
+        onPress={onPress}
+        onHoverIn={() => setIsHovered(true)}
+        onHoverOut={() => setIsHovered(false)}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel}
+        style={({ pressed }) => [appIconButtonStyles.pressable, style, pressed && appIconButtonStyles.pressed]}
+      >
+        <View style={appIconButtonStyles.imageOnlyMount}>
+          <Image source={imageSource} style={appIconButtonStyles.imageOnlyFill} resizeMode="cover" />
+        </View>
+      </Pressable>
+    );
+  }
 
   return (
     <Pressable
@@ -38,7 +56,7 @@ export default function AppIconButton({ icon, onPress, style, accessibilityLabel
         >
           <View style={[appIconButtonStyles.nail, appIconButtonStyles.nailTopLeft]} />
           <View style={[appIconButtonStyles.nail, appIconButtonStyles.nailTopRight]} />
-          <Text style={appIconButtonStyles.icon}>{icon}</Text>
+          {icon ? <Text style={appIconButtonStyles.icon}>{icon}</Text> : null}
         </LinearGradient>
       </View>
     </Pressable>
