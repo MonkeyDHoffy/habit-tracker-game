@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "schweinehund",
   "private": true,
   "version": "0.1.0",
@@ -6,7 +6,11 @@
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm -r --parallel dev",
+    "dev:mobile": "pnpm --filter @schweinehund/mobile dev",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.28.6"
   }
 }

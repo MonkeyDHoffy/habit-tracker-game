@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Schweinehund",
+    "slug": "schweinehund-mobile",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon-placeholder.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/icon-placeholder.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f4efe6"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/icon-placeholder.png"
+    }
+  }
+}

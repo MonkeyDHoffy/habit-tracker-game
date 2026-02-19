@@ -140,3 +140,15 @@ Wenn Spielmechaniken vorgeschlagen werden:
 - Balance berücksichtigen.
 - Einfachheit > Komplexität (v1.0).
 
+
+---
+
+## Struktur-Referenz (Mobile)
+
+Zur verbindlichen Ordnerstruktur und Ablageregeln siehe:
+- `context/FOLDER_STRUCTURE_CONTEXT.md`
+
+Hinweis:
+Bei Struktur-Aenderungen immer beide Dateien synchron halten:
+1. `context/FOLDER_STRUCTURE_CONTEXT.md`
+2. `context/PROJECT_CONTEXT.md`
